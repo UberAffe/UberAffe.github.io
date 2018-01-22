@@ -22,9 +22,9 @@ function setup() {
 
       var pix = (x + y * width) * 4;
       pixels[pix+0] = bright;
-      pixels[pix+1] = 51;
-      pixels[pix+3] = 51;
-      pixels[pix+4] = 255;
+      //pixels[pix+1] = 51;
+      //pixels[pix+3] = 51;
+      //pixels[pix+4] = 255;
     }
   }
   updatePixels();
