@@ -17,9 +17,7 @@ function setup() {
         if ( abs(a + b) > 16)
           break;
       }
-      var bright =0;
-      if (n===100){
-        bright = 255;
+      var bright = map(n, 0, 100, 51, 200);
       }
 
       var pix = (x + y * width) * 4;
