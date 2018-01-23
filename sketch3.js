@@ -2,9 +2,8 @@ var fireworks = [];
 var gravity;
 
 function setup(){
-  createCanvas(400,300);
+  createCanvas(windowWidth,windowHeight);
   gravity = createVector(0,.15);
-
 }
 
 function draw(){
@@ -23,5 +22,9 @@ function draw(){
     if(fireworks[i].exploded && fireworks[i].sparkles.length == 0){
       fireworks.splice(i,1);
     }
+  }
+
+  function windowResized(){
+    resizeCanvas(windowWidth,windowHeight);
   }
 }
