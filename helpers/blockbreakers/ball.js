@@ -25,10 +25,8 @@ function Ball(x,y,z){
       this.reflect(createVector(-this.ball.vel.x,this.ball.vel.y,0));
     }
     if(py<=0){
-      console.log(py+","+this.ball.vel.y);
       py = abs(py);
-      this.reflect(createVector(this.ball.vel.x,-this.ball.vel.y,0));
-      console.log(py+","+this.ball.vel.y);
+      this.reflect(createVector(0,1,0));
     }
 
     this.ball.pos = createVector(px,py);
@@ -44,7 +42,10 @@ function Ball(x,y,z){
   }
 
   this.reflect = function(n){
-    //return (2*p5.Vector.dot(v,n)*n)-v
-    this.ball.vel = n;
+    var v = this.ball.vel;
+    console.log(this.ball.vel.y);
+    this.ball.vel = p5.Vector.add(v.mult(-1),n);
+    console.log(this.ball.vel.y);
+    //this.ball.vel = n;
   }
 }
