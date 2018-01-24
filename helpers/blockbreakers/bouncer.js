@@ -1,8 +1,8 @@
 function Bouncer(){
-  this.bouncer = new Particle(width/2-20,height-10);
-  this.wide = 40;
+  this.wide = 60;
   this.tall = 10;
-  this.speed = 7;
+  this.bouncer = new Particle(width/2-(this.wide/2),height-this.tall);
+  this.speed = 6;
   this.speedmod = this.tallmod = this.widemod = 0;
 
 
@@ -21,9 +21,7 @@ function Bouncer(){
     push();
     colorMode(HSB,255);
     fill(200,255,255);
-    rect(this.bouncer.pos.x,this.bouncer.pos.y,this.wide+this.widemod,this.tall);//this.bouncer.pos.x,this.bouncer.pos.y,(this.wide+this.widemod),(this.tall));
-    // console.log((this.bouncer.pos.x<width&&this.bouncer.pos.x>0)+", "+
-    //   (this.bouncer.pos.y<height&&this.bouncer.pos.y>0));
+    rect(this.bouncer.pos.x,this.bouncer.pos.y,this.wide+this.widemod,this.tall);
     pop();
   }
 
@@ -41,7 +39,7 @@ function Bouncer(){
     var launch;
     if(x>=this.bouncer.pos.x &&
        x<=this.bouncer.pos.x+this.wide+this.widemod){
-      launch = createVector(0,-this.tall+this.tallmod);
+      launch = createVector(0,-(this.tall+this.tallmod)/2);
       launch.rotate(map(x-this.bouncer.pos.x,0,this.wide+this.widemod,-PI/2,PI/2));
     }
     return launch;
