@@ -3,11 +3,13 @@ function Ball(x,y,z){
   if(!y){y=height/2;}
   if(!z){z=0;}
   this.ball = new Particle(x,y,z);
+  this.previous = this.ball.copy();
   this.dropped = false;
   this.c = random(255);
 
 
   this.update = function(){
+    this.previous = this.ball.copy();
     this.ball.applyForce(gravity);
 
     this.ball.update();

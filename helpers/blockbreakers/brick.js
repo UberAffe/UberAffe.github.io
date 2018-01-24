@@ -12,8 +12,9 @@ function Brick(x,y,life){
     }
   }
 
-  this.collides = function(p){
+  this.collides = function(b){
     if(this.life>0){
+      var p = b.ball.pos;
       if(p.x>=this.x && p.x<=this.x+brickW){
         if(p.y>=this.y && p.y<=this.y+brickH){
           console.log('smack');
@@ -26,5 +27,7 @@ function Brick(x,y,life){
 
   this.damage = function(){
     this.life--;
+    if(this.life<=0){return 500}
+    return 100;
   }
 }

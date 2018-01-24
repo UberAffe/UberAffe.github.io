@@ -2,7 +2,7 @@ function Bouncer(){
   this.wide = 60;
   this.tall = 10;
   this.bouncer = new Particle(width/2-(this.wide/2),height-this.tall);
-  this.speed = 6;
+  this.speed = width*height/1234;
   this.speedmod = this.tallmod = this.widemod = 0;
 
 

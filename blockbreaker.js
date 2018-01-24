@@ -1,10 +1,11 @@
 var brickW = 40;
 var brickH = 40;
-
+var score;
 var bouncer;
 var gravity;
 var balls = [];
 var bricks = [];
+var par;
 
 function setup(){
   createCanvas(windowWidth-20,windowHeight-90);
@@ -22,6 +23,8 @@ function setup(){
       // console.log(i+", "+j+" : "+bricks.length);
     }
   }
+  score = 0;
+  par = createDiv('').size(100,100);
 }
 
 function draw(){
@@ -39,7 +42,9 @@ function draw(){
       // console.log(vel);
       // console.log(balls[i].ball.vel);
       for(b of bricks){
-        if(b.collides(balls[i].ball.pos)){b.damage();}
+        if(b.collides(balls[i])){
+          score += b.damage();
+        }
       }
       balls[i].update();
       balls[i].show();
@@ -49,6 +54,8 @@ function draw(){
     b.show();
   }
   bouncer.show();
+  score += 0.01;
+  par.html(score);
 }
 
 function windowResized(){

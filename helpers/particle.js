@@ -19,4 +19,9 @@ function Particle(x,y,z){
   this.show = function(){
     point(this.pos.x, this.pos.y);
   }
+
+  this.copy = function(){
+    var p = new Particle(this.pos.x,this.pos.y,this.pos.z);
+    return p;
+  }
 }
