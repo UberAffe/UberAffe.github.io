@@ -1,7 +1,10 @@
-function Particle(x,y){
-  this.pos = createVector(x,y);
-  this.vel = createVector(0,0);
-  this.acc = createVector(0,0);
+function Particle(x,y,z){
+  if(!x){x=random(width);}
+  if(!y){y=random(height);}
+  if(!z){z=0;}
+  this.pos = createVector(x,y,z);
+  this.vel = createVector(0,0,0);
+  this.acc = createVector(0,0,0);
 
   this.applyForce = function(force){
     this.acc.add(force);
