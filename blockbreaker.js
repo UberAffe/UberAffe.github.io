@@ -60,7 +60,7 @@ function draw(){
   if(balls.length>0){
     score += 0.01;
   }
-  par.html("x: "+floor(mouseX)+" y: "+floor(mouseY)+" Score: "+score);
+  par.html("Score: "+score);
 }
 
 function windowResized(){
