@@ -47,9 +47,7 @@ function draw(){
           balls[i].ball.pos = line;
           balls[i].rebound(line.normal);
         }
-        if(bricks[j].life>0){
-          bricks[j].show();
-        } else{
+        if(bricks[j].life<=0){
           bricks.splice(j,1);
         }
       }
@@ -59,8 +57,11 @@ function draw(){
   }
   if(balls.length>0){
     score += 0.01;
+    for(b of bricks){
+      b.show();
+    }
   }
-  par.html("Score: "+score);
+  par.html("Score: "+floor(score));
 }
 
 function windowResized(){
