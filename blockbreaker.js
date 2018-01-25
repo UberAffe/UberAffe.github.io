@@ -88,18 +88,20 @@ function intercept(p1, p2, q1, q2){
 
 function normal2D(p1,p2){
   var t = createVector(p2.x-p1.x,p2.y-p1.y,0);
-  return p5.Vector.fromAngle(t.heading()-PI/2);
+  return p5.Vector.fromAngle(t.heading()+PI/2);
 }
 
 // takes any vector and (unit)normal as well a loss value from 0-1
 // returns the reflection multiplied by loss
 function reflect(vector,normal,loss){
   if(!loss){loss = 1;}
-  var h1 = vector.heading();
-  var h2 = normal.heading();
-  var theta = (h2-h1);
-  console.log(theta);
-  var r = p5.Vector.fromAngle(2*theta);
+  // var h1 = vector.heading();
+  // var h2 = normal.heading();
+  // var theta = -(h1-h2);
+  var theta = vector.angleBetween(normal);
+  //console.log(vector);
+  var r = p5.Vector.fromAngle(vector.heading()-2*theta);
   r.mult(vector.mag()*loss);
+  console.log(r.heading()+", "+theta+", "+vector.heading()+", "+normal.heading());
   return r;
 }
