@@ -5,6 +5,7 @@ var gravity;
 var balls = [];
 var bricks = [];
 var par;
+var density;
 
 function setup(){
   createCanvas(windowWidth-20,windowHeight-110);
@@ -14,14 +15,8 @@ function setup(){
   b.ball.vel = createVector(0,5,0);
   // console.log((width/brickW)+", "+(height/(brickH*4)));
   balls.push(b);
-  for(var i = 0; i < floor(width/(radius*2)); i++){
-    for(var j = 0; j < height/(radius*8); j++){
-      if(random(1)>.3){
-        bricks.push(new Brick(i*radius*2,j*radius*2,ceil(pow(random(1),8)*20)));
-      }
-      // console.log(i+", "+j+" : "+bricks.length);
-    }
-  }
+  density = .5;
+  populate();
   score = 0;
   par = createDiv('').size(100,20);
 }
@@ -40,14 +35,23 @@ function draw(){
       if(vel){balls[i].ball.vel = vel;}
       // console.log(vel);
       // console.log(balls[i].ball.vel);
-      for(b of bricks){
-        var line = b.collides(balls[i].ball.pos,balls[i].previous.pos);
+      if(bricks.length<=0){
+        density *= .8;
+        populate();
+      }
+      for(var j = bricks.length-1; j >=0; j--){
+        var line = bricks[j].collides(balls[i].ball.pos,balls[i].previous.pos);
         if(line){
-          score += b.damage();
-          console.log(line);
-          balls[i].rebound(line);
+          score += bricks[j].damage();
+          line.add(line.normal);
+          balls[i].ball.pos = line;
+          balls[i].rebound(line.normal);
         }
-        b.show();
+        if(bricks[j].life>0){
+          bricks[j].show();
+        } else{
+          bricks.splice(j,1);
+        }
       }
       balls[i].update();
       balls[i].show();
@@ -85,9 +89,19 @@ function intercept(p1, p2, q1, q2){
   }
   return p;
 }
+function populate(){
+  for(var i = 0; i < floor(width/(radius*2)); i++){
+    for(var j = 0; j < height/(radius*8); j++){
+      if(random(1)>density){
+        bricks.push(new Brick(i*radius*2,j*radius*2,ceil(pow(random(1),8)*20)));
+      }
+    }
+  }
+}
 
 function normal2D(p1,p2){
   var t = createVector(p2.x-p1.x,p2.y-p1.y,0);
+  console.log(t.heading()*180/PI);
   return p5.Vector.fromAngle(t.heading()+PI/2);
 }
 
@@ -95,13 +109,9 @@ function normal2D(p1,p2){
 // returns the reflection multiplied by loss
 function reflect(vector,normal,loss){
   if(!loss){loss = 1;}
-  // var h1 = vector.heading();
-  // var h2 = normal.heading();
-  // var theta = -(h1-h2);
-  var theta = vector.angleBetween(normal);
-  //console.log(vector);
-  var r = p5.Vector.fromAngle(vector.heading()-2*theta);
+  var theta = PI-(vector.heading()-normal.heading());
+  var r = p5.Vector.fromAngle(normal.heading()+theta);
   r.mult(vector.mag()*loss);
-  console.log(r.heading()+", "+theta+", "+vector.heading()+", "+normal.heading());
+  console.log((r.heading()*180/PI)+", "+(theta*180/PI)+", "+(vector.heading()*180/PI)+", "+(normal.heading()*180/PI));
   return r;
 }

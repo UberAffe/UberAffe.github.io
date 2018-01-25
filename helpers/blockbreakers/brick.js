@@ -31,7 +31,8 @@ function Brick(x,y,life){
       for (var i = 0, j = this.verticies.length - 1; i < this.verticies.length; j = i++) {
         tr = intercept(this.verticies[i],this.verticies[j],q1,q2);
         if(tr){
-          console.log("intesect");
+          tr.normal = normal2D(this.verticies[j],this.verticies[i]);
+          console.log(this.verticies[j]+", "+this.verticies[i]);
           break;
         }
       }
