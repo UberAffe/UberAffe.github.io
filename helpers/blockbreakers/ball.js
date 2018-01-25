@@ -18,15 +18,15 @@ function Ball(x,y,z){
     var py = this.ball.pos.y;
     if(px<=0){
       px = abs(px);
-      this.reflect(createVector(-this.ball.vel.x,this.ball.vel.y,0));
+      this.rebound(createVector(1,0,0));
     }
     if(px>=width){
       px = 2*width-px;
-      this.reflect(createVector(-this.ball.vel.x,this.ball.vel.y,0));
+      this.rebound(createVector(-1,0,0));
     }
     if(py<=0){
       py = abs(py);
-      this.reflect(createVector(0,1,0));
+      this.rebound(createVector(1,0,0));
     }
 
     this.ball.pos = createVector(px,py);
@@ -41,11 +41,9 @@ function Ball(x,y,z){
     pop();
   }
 
-  this.reflect = function(n){
-    var v = this.ball.vel;
-    console.log(this.ball.vel.y);
-    this.ball.vel = p5.Vector.add(v.mult(-1),n);
-    console.log(this.ball.vel.y);
-    //this.ball.vel = n;
+  this.rebound = function(tangent){
+    var normal = normal2D(tangent,createVector(0,0));
+    //console.log(normal);
+    this.ball.vel = reflect(this.ball.vel,normal,1);
   }
 }
