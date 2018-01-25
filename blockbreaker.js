@@ -18,7 +18,7 @@ function setup(){
   density = .5;
   populate();
   score = 0;
-  par = createDiv('').size(100,20);
+  par = createDiv('').size(width,20);
 }
 
 function draw(){
@@ -64,7 +64,7 @@ function draw(){
 }
 
 function windowResized(){
-  resizeCanvas(windowWidth-20,windowHeight-90);
+  resizeCanvas(windowWidth-20,windowHeight-110);
 }
 
 // returns intercept x, y
