@@ -45,7 +45,7 @@ function Bouncer(){
     var launch;
     if(x>=this.bouncer.pos.x &&
        x<=this.bouncer.pos.x+this.wide+this.widemod){
-      launch = createVector(0,-this.speed*(this.tall+this.tallmod)/2);
+      launch = createVector(0,-this.speed*(this.tall+this.tallmod)/3);
       launch.rotate(map(x-this.bouncer.pos.x,0,this.wide+this.widemod,-PI/2,PI/2));
     }
     return launch;

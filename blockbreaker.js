@@ -1,4 +1,4 @@
-var radius = 40;
+var radius = 20;
 var score;
 var bouncer;
 var gravity;
