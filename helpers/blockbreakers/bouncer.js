@@ -29,13 +29,9 @@ function Bouncer(){
 
   this.control = function(){
     if(keyIsDown(LEFT_ARROW)){
-      //this.bouncer.pos.add(createVector(-(this.speed+this.speedmod),0));
       this.bouncer.applyForce(createVector(-(this.speed+this.speedmod)/(this.speed+this.speedmod+2),0));
-      //console.log(this.bouncer.vel.x);
     }else if(keyIsDown(RIGHT_ARROW)){
-      //this.bouncer.pos.add(createVector((this.speed+this.speedmod),0));
       this.bouncer.applyForce(createVector((this.speed+this.speedmod)/(this.speed+this.speedmod+2),0));
-      //console.log(this.bouncer.vel.x);
     }else{
       this.bouncer.vel.mult(0);
     }

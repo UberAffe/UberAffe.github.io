@@ -20,8 +20,6 @@ function Brick(x,y,life){
       }
       endShape(CLOSE);
       pop();
-      // rect(x,y,brickW,brickH);
-      // console.log(this.x+", "+this.y);
     }
   }
 
@@ -32,7 +30,6 @@ function Brick(x,y,life){
         tr = intercept(this.verticies[i],this.verticies[j],q1,q2);
         if(tr){
           tr.normal = normal2D(this.verticies[j],this.verticies[i]);
-          console.log(this.verticies[j]+", "+this.verticies[i]);
           break;
         }
       }

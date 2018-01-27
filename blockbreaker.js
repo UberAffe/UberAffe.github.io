@@ -13,7 +13,6 @@ function setup(){
   gravity = createVector(0,.005,0);
   var b = new Ball();
   b.ball.vel = createVector(0,5,0);
-  // console.log((width/brickW)+", "+(height/(brickH*4)));
   balls.push(b);
   density = .5;
   populate();
@@ -28,13 +27,10 @@ function draw(){
   for(var i = balls.length-1;i>=0;i--){
     if(balls[i].dropped){
       balls.splice(i,1);
-      console.log('reached');
     }else{
       var vel;
       if(balls[i].ball.pos.y>=height-10){vel = bouncer.rebound(balls[i].ball.pos.x);}
       if(vel){balls[i].ball.vel = vel;}
-      // console.log(vel);
-      // console.log(balls[i].ball.vel);
       if(bricks.length<=0){
         density *= .8;
         populate();
@@ -102,7 +98,6 @@ function populate(){
 
 function normal2D(p1,p2){
   var t = createVector(p2.x-p1.x,p2.y-p1.y,0);
-  console.log(t.heading()*180/PI);
   return p5.Vector.fromAngle(t.heading()+PI/2);
 }
 
@@ -113,6 +108,5 @@ function reflect(vector,normal,loss){
   var theta = PI-(vector.heading()-normal.heading());
   var r = p5.Vector.fromAngle(normal.heading()+theta);
   r.mult(vector.mag()*loss);
-  console.log((r.heading()*180/PI)+", "+(theta*180/PI)+", "+(vector.heading()*180/PI)+", "+(normal.heading()*180/PI));
   return r;
 }

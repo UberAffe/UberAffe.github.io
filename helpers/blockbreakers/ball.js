@@ -42,7 +42,6 @@ function Ball(x,y,z){
   }
 
   this.rebound = function(normal){
-    //console.log(normal);
     this.ball.vel = reflect(this.ball.vel,normal,1);
   }
 }
