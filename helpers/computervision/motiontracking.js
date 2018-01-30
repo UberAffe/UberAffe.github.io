@@ -4,7 +4,7 @@ let prev;
 let current;
 let lerpX;
 let lerpY;
-let threshold = 10;
+let threshold = 50;
 let can
 let once = false;
 
@@ -14,7 +14,7 @@ function setup(){
   current = cam.pixels;
   cam.hide();
   can = createCanvas(cam.width,cam.height);
-  frameRate(1);
+  // frameRate(frameRate());
 }
 
 function draw(){
@@ -30,10 +30,11 @@ function draw(){
   let avgX = 0;
   let avgY = 0;
   let count = 0;
+  let dens = pixelDensity();
   let prevColor = color(0,0,0);
-  for(let x = 0; x < width; x++){
-    for(let y = 0; y < height; y++){
-      let loc = (x+y*width)*4;
+  for(let x = 0; x < width*dens; x++){
+    for(let y = 0; y < height*dens; y++){
+      let loc = (x+y*width*dens)*4;
       // let currentColor = current[loc];
       // point(x,y);
       let r1 = current[loc];
@@ -50,8 +51,8 @@ function draw(){
         // pixels[loc] = color(r1,g1,b1,100);
         pixels[loc] = r1;
         pixels[loc+1] = g1;
-        pixels[loc+2] = g1;
-        pixels[loc+3] = 100;
+        pixels[loc+2] = b1;
+        pixels[loc+3] = 200;
         avgX += x;
         avgY += y;
         count++;
@@ -61,12 +62,12 @@ function draw(){
         pixels[loc] = 0;
         pixels[loc+1] = 0;
         pixels[loc+2] = 0;
-        pixels[loc+3] = 0;
+        pixels[loc+3] = 255;
       }
     }
   }
-  // updatePixels();
-  if(count>300){
+  updatePixels();
+  if(count>0){
    avgX = avgX/count;
    avgY = avgY/count;
    fill(255,0,255);
