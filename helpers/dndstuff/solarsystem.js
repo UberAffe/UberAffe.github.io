@@ -1,6 +1,6 @@
 
 
-let input = ["sun","1","0","1","0","1","Exandria","324","0","24","0","2","Bendis","30","-15","24","0","Roshar","32","0","24","0"];
+let input = ["sun","1","0","1","0","1","Exandria","324","0","24","0","2","Bendis","30","15","24","-48","Roshar","32","0","24","0"];
 let months = ["Unilis","Duoilis","Triblis","Quadilis","Quinilis","Sextilis","Septilis","Octilis","Novilis","Decilis"];
 let days = ["Biri","Ekii","Youni","Dei"];
 let mLength =[33,32,32,33,32,32,33,32,32,33];
