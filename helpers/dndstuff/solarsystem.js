@@ -6,7 +6,7 @@ let days = ["Biri","Ekii","Youni","Dei"];
 let mLength =[33,32,32,33,32,32,33,32,32,33];
 let bodies = [];
 let advance = true;
-let count = 0;
+let count = 167664;
 let sp_Text;
 let speed;
 let hour;
@@ -34,8 +34,11 @@ function setup(){
   sp_Text = document.createElement("INPUT");
   sp_Text.setAttribute("type","number");
   sp_Text.setAttribute("step","1");
-  sp_Text.defaultValue = 1;
+  sp_Text.defaultValue = 0;
   document.body.appendChild(sp_Text);
+  let p = document.createElement("HTML");
+  p.html = "Hit 'a' to increment by a number of hours, Hit 'd' to travel to a specific date. Use the textbox to set the animation speed and spacebar to toggle animation on and off.";
+  document.body.appendChild(p);
   // frameRate(1);
 }
 
