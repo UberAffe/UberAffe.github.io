@@ -28,7 +28,7 @@ function setup(){
   //  feed.print();
   //  frameRate(1);
    learningRate = .1;
-   for(let i = 0; i<10000; i++){
+   for(let i = 0; i<500000; i++){
      let data = random(trainingData);
      feed = nn.feedForward(data.inputs);
      nn.supervisedTrain(data.targets);
@@ -82,10 +82,10 @@ class NeuralNetwork{
       gradients.hadamardProduct(errors);
       gradients.multiply(learningRate);
       let deltas = Matrix.multiply(gradients,Matrix.transpose(this.results[i]));
+      let t = Matrix.transpose(this.weights[i]);
       this.weights[i].add(deltas);
       this.biases[i].add(gradients);
-      errors = Matrix.transpose(this.weights[i]);
-      errors.multiply(errors);
+      errors = Matrix.multiply(t, errors);
     }
   }
 }
