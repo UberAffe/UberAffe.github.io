@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
+		<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.js"></script>
+    <p>Stat Rolling</p>
+    <script>
+    function rollStats(){
+      var strP = document.getElementsByName('str');
+      var dexP = document.getElementsByName('dex');
+      var conP = document.getElementsByName('con');
+      var intP = document.getElementsByName('int');
+      var wisP = document.getElementsByName('wis');
+      var chaP = document.getElementsByName('cha');
+      var str = dex = con = int = wis = cha = 3;
+      var current;
+      for(var i=15; i>0){
+        current = Math.floor(Math.random()*6+1);
+        if(strP.innerHTML = current){str += Math.floor(i/5);}
+        if(dexP.innerHTML = current){dex += Math.floor(i/5);}
+        if(conP.innerHTML = current){con += Math.floor(i/5);}
+        if(intP.innerHTML = current){int += Math.floor(i/5);}
+        if(wisP.innerHTML = current){wis += Math.floor(i/5);}
+        if(chaP.innerHTML = current){cha += Math.floor(i/5);}
+      }
+      strP.innerHTML = ""+str;
+      dexP.innerHTML = ""+dex;
+      conP.innerHTML = ""+con;
+      intP.innerHTML = ""+int;
+      wisP.innerHTML = ""+wis;
+      chaP.innerHTML = ""+cha;
+    }
+    </script>
+  </head>
+  <body>
+		<a href='../index.html'>Home</a>
+    <script language="javascript" type="text/javascript"  src="../helpers\StatMath.js"></script>
+    Pick a reference number for each stat.
+    <form name="myForm" onsubmit="rollStats()">
+      Strength:<br>
+      <input type="text" name="str"><br>
+      Dexterity:<br>
+      <input type="text" name="dex"><br>
+      Constitution:<br>
+      <input type="text" name="con"><br>
+      Intelligence:<br>
+      <input type="text" name="int"><br>
+      Wisdom:<br>
+      <input type="text" name="wis"><br>
+      Charisma:<br>
+      <input type="text" name="cha"><br>
+      <input type="submit" value"Roll Stats">
+    </form>
+  </body>
+</html>

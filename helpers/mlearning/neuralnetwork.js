@@ -2,6 +2,7 @@ let nn;
 let trainingData;
 let feed;
 let learningRate;
+let set;
 
 function setup(){
    nn = new NeuralNetwork(2,2,1);
@@ -28,18 +29,23 @@ function setup(){
   //  feed.print();
   //  frameRate(1);
    learningRate = .1;
-   for(let i = 0; i<500000; i++){
-     let data = random(trainingData);
-     feed = nn.feedForward(data.inputs);
-     nn.supervisedTrain(data.targets);
-   }
-   nn.feedForward([0,0]).print();
-   nn.feedForward([1,1]).print();
-   nn.feedForward([1,0]).print();
-   nn.feedForward([0,1]).print();
+   set = 1;
 }
 
 function draw(){
+  if(set <= 10){
+    for(let i = 0; i<10; i++){
+      // console.log("training set "+set+"."+(i+1));
+      let data = random(trainingData);
+      nn.feedForward(data.inputs);
+      nn.supervisedTrain(data.targets);
+    }
+    console.log("test set "+set++);
+    nn.feedForward([0,0]).print();
+    // nn.feedForward([1,1]).print();
+    nn.feedForward([1,0]).print();
+    // nn.feedForward([0,1]).print();
+  }
 }
 
 class NeuralNetwork{
@@ -74,15 +80,19 @@ class NeuralNetwork{
   }
 
   supervisedTrain(answer){
+    // initial error is expected minus guess
     let errors = Matrix.fromArray(answer);
     let m = Matrix.multiply(this.results[this.netDepth],-1);
     errors.add(m);
     for(let i = this.netDepth-1; i>=0; i--){
+      // errors.print();
       let gradients = Matrix.map(this.results[i+1],derivativeSigmoid);
       gradients.hadamardProduct(errors);
       gradients.multiply(learningRate);
-      let deltas = Matrix.multiply(gradients,Matrix.transpose(this.results[i]));
+      // gradients.print();
+      let deltas = Matrix.multiply(gradients,Matrix.transpose(this.weights[i]));
       let t = Matrix.transpose(this.weights[i]);
+      //delta weight = (lr times E times (o times (1-o))) dot inverseweights
       this.weights[i].add(deltas);
       this.biases[i].add(gradients);
       errors = Matrix.multiply(t, errors);
@@ -158,7 +168,7 @@ class Matrix{
         for(let c = 0; c < result.columns; c++){
           sum = 0;
           for(let offset = 0; offset < m2.rows; offset++){
-            sum += m1.data[r*(m2.rows-1)+offset]*m2.data[offset*(m2.rows-1)+c];
+            sum += m1.data[r*m2.rows+offset]*m2.data[offset*m2.columns+c];
           }
           result.data[r*result.columns+c] = sum;
         }
@@ -187,12 +197,14 @@ class Matrix{
         for(let c = 0; c < result.columns; c++){
           let sum = 0;
           for(let offset = 0; offset < m2.rows; offset++){
-            sum += this.data[r*offset+offset]*m2.data[offset*c+c];
+            sum += this.data[r*m2.rows+offset]*m2.data[c+offset*m2.columns];
           }
-          result.data[r*c+c] = sum;
+          result.data[r*result.columns+c] = sum;
         }
       }
-      this.data = result;
+      this.rows = result.rows;
+      this.columns = result.columns;
+      this.data = result.data;
     }else if(typeof(m2) == "number"){
       this.map(function(v){return v*m2;});
     }
@@ -203,7 +215,7 @@ class Matrix{
   }
 
   print(){
-    // console.log(this.rows+"X"+this.columns);
+    console.log(this.rows+"X"+this.columns);
     console.table(this.data);
   }
 }
