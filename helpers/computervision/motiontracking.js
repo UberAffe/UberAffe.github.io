@@ -8,11 +8,11 @@ let threshold = 50;
 let can
 let once = false;
 let running = false;
+//let blobs= [];
 
-self.onmessage = e =>{
-  cam = e.data;
+/*self.onmessage = e =>function(e){
   start();
-}
+}*/
 
 function distSqr(x1, y1, z1, x2, y2, z2){
   let dx = x1-x2;
@@ -22,7 +22,10 @@ function distSqr(x1, y1, z1, x2, y2, z2){
   return pow(dx,2)+pow(dy,2)+pow(dz,2);
 }
 
-function start(){
+function start(evt){
+  console.log(evt)
+  cam = document.querySelector('video');;
+  cam.hide();
   running = true;
   while(running){
     prev = current;
@@ -54,12 +57,11 @@ function start(){
      avgY = avgY/count;
      lerpX = lerp(lerpX,avgX,0.1);
      lerpY = lerp(lerpY,avgY,0.1);
-     let blobs = [];
      let blob = new Blob();
      blob.x = lerpX;
      blob.y = lerpY;
      blobs.push(blob);
-     self.postMessage(blobs);
+     postMessage(blobs);
     }
   }
 }
