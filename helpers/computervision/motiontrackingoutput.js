@@ -25,7 +25,7 @@ function blobsTracked(e){
 }
 
 function sendCapture(){//localMediaStream){
-  // let capture = document.querySelector('video');
-  // capture.src = window.URL.createObjectURL(localMediaStream);
+   let capture = document.querySelector('video');
+   capture.src = window.URL.createObjectURL(localMediaStream);
   mtracking.postMessage(capture);
 }
