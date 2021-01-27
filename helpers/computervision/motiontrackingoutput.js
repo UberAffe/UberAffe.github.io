@@ -3,7 +3,7 @@ let capture;
 let mtracking;
 function setup(){
   createCanvas(640,480);
-  capture = createCapture();
+  capture = createCapture(VIDEO);
   capture.hide();
   if(typeof(Worker) !== undefined){
     console.log('workers allowed');
