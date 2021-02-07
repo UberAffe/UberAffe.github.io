@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+
+	<script src="../helpers/Customer.js"></script>
+	<title>Your Bank</title>
+</head>
+
+<body>
+	<link rel="stylesheet" href="../helpers/Customer.css">
+	<h2>Welcome to the Bank</h2>
+	<nav>
+		<a class="viewaccounts" onclick="showAccounts()">View Accounts</a>
+		<a class="viewpendingtransfers" onclick="showTransfers()">View Pending Transfers</a>
+		<a class="logout" onclick="logout()">Logout</a>
+	</nav>
+	<br><br>
+	<div class="div-table accounts">
+	</div>
+	<div class="div-table transfers">
+	</div>
+	<div class="form accounts">
+		<select class="deposit withdraw transfer" name="transaction-type" onchange="switchTransaction()">
+			<option value="deposit">Deposit</option>
+			<option value="withdraw">Withdraw</option>
+			<option value="transfer">Transfer</option>
+		</select>
+		<br class="deposit withdraw transfer">
+		<label class="withdraw transfer">From Account</label>
+		<select class="withdraw transfer" name="from-account"></select>
+		<br class="withdraw transfer">
+		<label class="deposit transfer">Into Account</label>
+		<select class="deposit" name="to-account"></select>
+		<input class="transfer" name="transfer-to" type="text">
+		<br class="deposit transfer">
+		<label class="deposit withdraw transfer" for="amount">Amount</label>
+		<input class="deposit withdraw transfer" name="amount" type="text">
+		<button class="deposit withdraw transfer" name="doTransaction" onclick="doTransaction()"></button>
+	</div>
+	<section class="templates">
+		<div class="div-table-row sample account-row">
+			<div class="div-table-col account">Account #</div>
+			<div class="div-table-col type">Type</div>
+			<div class="div-table-col balance">Current Balance</div>
+		</div>
+		<div class="div-table sample history-table">
+			<div class="div-table-row">
+				<div class="div-table-col timestamp">Date</div>
+				<div class="div-table-col description">Description</div>
+				<div class="div-table-col amount">Amount</div>
+				<div class="div-table-col previousbalance">Previous Balance</div>
+			</div>
+		</div>
+		<div class="div-table-row sample history-row">
+			<div class="div-table-col timestamp">Date</div>
+			<div class="div-table-col description">Description</div>
+			<div class="div-table-col amount">Amount</div>
+			<div class="div-table-col previousbalance">Previous Balance</div>
+		</div>
+		<div class="div-table-row sample transfer-row" onclick="selectTransfer(this)">
+			<div class="div-table-col timestamp">
+				<input type="checkbox" class="transfer-selection" name="transfer-selection">
+				<div class=inner></div>
+			</div>
+			<div class="div-table-col description"></div>
+			<div class="div-table-col amount"></div>
+		</div>
+		<div class="div-table-row sample transfer-header">
+			<div class="div-table-col timestamp">Date</div>
+			<div class="div-table-col description">Description</div>
+			<div class="div-table-col amount">Amount</div>
+		</div>
+	</section>
+</body>
+
+</html>

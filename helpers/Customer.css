@@ -1,0 +1,78 @@
+/*.sample{
+	display:true;
+}
+ .div-table {
+    display: table;         
+    width: auto;         
+    background-color: #eee;         
+    border: 1px solid #666666;         
+    border-spacing: 5px; /* cellspacing:poor IE support for  this 
+  } */
+  .sample{
+    display:none;
+  }
+  .div-table{
+    border-style:solid;
+    border-width: 1px;
+    border-collapse: collapse;
+  }
+  .div-table-row {
+    width: 100%;
+    clear: both;
+  }
+  .header{
+    text-align: left;
+  }
+  .incoming{
+    background-color:rgb(163, 218, 136);
+  }
+  .incoming.selected{
+    background-color:rgb(131, 175, 108);
+  }
+  .outgoing{
+    background-color:rgb(214, 154, 143);
+  }
+  .outgoing.selected{
+    background-color:rgb(167, 119, 111);
+  }
+  .div-table-col {
+    display: inline-block; 
+    text-align: center;           
+  }
+  .transfers .div-table-col.timestamp{
+    width:15%;
+  }
+  .transfers .div-table-col.description{
+    width:50%;
+  }
+  .transfers .div-table-col.amount{
+    width:25%;
+  }
+  .accounts .div-table-col.timestamp{
+    width:10%;
+  }
+  .accounts .div-table-col.description{
+    width:40%;
+  }
+  .accounts .div-table-col.amount{
+    width:20%;
+  }
+  .accounts .div-table-col.account{
+    width:25%;
+  }
+  .accounts .div-table-col.type{
+    width:40%;
+  }
+  .accounts .div-table-col.balance{
+    width:auto;
+  }
+  .history{
+    border-style: dotted;
+    background-color:rgb(130, 134, 128);
+  }
+  .account-row-one{
+    background-color:rgb(159, 161, 158);
+  }
+  .account-row-two{
+    background-color:rgb(143, 146, 142);
+  }
