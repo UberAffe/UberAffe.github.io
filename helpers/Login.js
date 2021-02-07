@@ -16,7 +16,7 @@ function submit() {
     let data = { username: un, password: ps };
     data = JSON.stringify(data);
     xhr.onreadystatechange = callback;
-    xhr.open("POST","http://66.41.241.124/Banking/rest/user/login", true);
+    xhr.open("POST","http://66.41.241.124:8080/Banking/rest/user/login", true);
     xhr.setRequestHeader("content-type","application/json");
     xhr.send(data);
 
