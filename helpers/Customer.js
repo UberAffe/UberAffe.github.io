@@ -36,7 +36,7 @@ function doTransaction(){
 	console.log(output);
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = transactionComplete;
-    xhr.open("POST","http://localhost:8080/Banking/rest/transaction/send", true);
+    xhr.open("POST","http://66.41.241.124/Banking/rest/transaction/send", true);
     xhr.setRequestHeader("content-type","application/json");
 	xhr.send(output);
 
@@ -44,7 +44,7 @@ function doTransaction(){
 		if(xhr.readyState==4&&xhr.status==200){
 			if(JSON.parse(xhr.responseText)){
 				xhr.onreadystatechange = updateUser;
-				xhr.open("POST","http://localhost:8080/Banking/rest/customer/read", true);
+				xhr.open("POST","http://66.41.241.124/Banking/rest/customer/read", true);
 				xhr.setRequestHeader("content-type","application/json");
 				xhr.send(localStorage.getItem("user"));
 			}
