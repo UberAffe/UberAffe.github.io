@@ -36,15 +36,15 @@ function keyPressed(){
       motion = swipe();
       flipVert();
       break;
-      case DOWN_ARROW: console.log('donw');
+      case DOWN_ARROW: console.log('down');
       motion = swipe();
       break;
       case LEFT_ARROW: console.log('left');
-      flipDiag();
       flipVert();
+      flipDiag();
       motion = swipe();
-      flipVert();
       flipDiag();
+      flipVert();
       break;
       case RIGHT_ARROW: console.log('right');
       flipDiag();
@@ -62,15 +62,15 @@ function keyPressed(){
 
 function flipVert(){
   var ti = 0;
-  var tj = 0;
+  var tj = 3;
   for(var i = 0;i<4;i++){
-    for(var j = 3; j>=0; j--){
+    for(var j = 0; j<4; j++){
       flippedBoard[ti*4+tj] = board[i*4+j];
       console.log(i+","+j+" becomes "+ti+","+tj);
-      tj++;
+      tj--;
     }
     ti++;
-    tj = 0;
+    tj = 3;
   }
   board = flippedBoard;
 }
@@ -121,20 +121,21 @@ function swipe(){
           }
           k--;
         }
-      }
-      let k = j-1;
-      while(k>=0){
-        let val2 = board[i*4+k];
-        if(val2 == val1&& val1!=0){
-          board[i*4+j] += val2;
-          board[i*4+k] = 0;
-          console.log("added "+val2+" to "+val1);
-          motion = true;
-          k = 0;
-        }else if(val2 >0){
-          k=0;
+      }else {
+        let k = j-1;
+        while(k>=0){
+          let val2 = board[i*4+k];
+          if(val2 == val1&& val1!=0){
+            board[i*4+j] += val2;
+            board[i*4+k] = 0;
+            console.log("added "+val2+" to "+val1);
+            motion = true;
+            k = 0;
+          }else if(val2 >0){
+            k=0;
+          }
+          k--;
         }
-        k--;
       }
     }
   }
