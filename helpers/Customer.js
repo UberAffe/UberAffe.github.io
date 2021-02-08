@@ -6,10 +6,51 @@ var server;
 window.onload = ()=>{
 	user = JSON.parse(localStorage.getItem("user"));
 	server = localStorage.getItem("server");
-	setupAccounts();
+	buildAccountTable();
 	setupForm();
-	setupTransfers();
+	buildTransferTable();
 	showAccounts();
+}
+
+window.setInterval(updateUser, 60000);
+
+function view(classtype){
+    document.querySelectorAll(".base").forEach((e)=>{
+        if(classtype && e.classList.contains(classtype)){
+            e.style.display="block";
+        }else{
+            e.style.display="none";
+        }
+    });
+}
+
+function showPendingAccounts(){
+	view("pending");
+	buildPendingTable();
+}
+
+function submitAccount(){
+	var output = document.querySelector("select[name=type]").value;
+	output = {
+		ownerIDs:[user.userID],
+		type:output,
+		balance:document.querySelector("[name=balance]").value
+	};
+	
+	output = JSON.stringify(output);
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = applyComplete;
+    xhr.open("POST",server+"/customer/apply", true);
+    xhr.setRequestHeader("content-type","application/json");
+	xhr.send(output);
+
+	function applyComplete(){
+		if(xhr.readyState==4&&xhr.status==200){
+			if(JSON.parse(xhr.responseText)){
+				updateUser();
+			}
+		}
+	}
 }
 
 function selectTransfer(row){
@@ -62,26 +103,28 @@ function doTransaction(){
 	function transactionComplete(){
 		if(xhr.readyState==4&&xhr.status==200){
 			if(JSON.parse(xhr.responseText)){
-				xhr.onreadystatechange = updateUser;
-				xhr.open("POST",server+"/customer/read", true);
-				xhr.setRequestHeader("content-type","application/json");
-				xhr.send(localStorage.getItem("user"));
+				updateUser();
 			}
 		}
 	}
-
-	function updateUser(){
-		refreshUser(xhr);
-	}
 }
 
-function refreshUser(xhr){
-	if(xhr.readyState==4&&xhr.status==200){
-		localStorage.setItem("user",xhr.responseText);
-		user = JSON.parse(xhr.responseText);
-		console.log(user);
-		setupAccounts();
-		setupForm();
+function updateUser(){
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = refreshUser;
+	xhr.open("POST",server+"/customer/read", true);
+	xhr.setRequestHeader("content-type","application/json");
+	xhr.send(localStorage.getItem("user"));
+
+	function refreshUser(xhr){
+		if(xhr.readyState==4&&xhr.status==200){
+			localStorage.setItem("user",xhr.responseText);
+			user = JSON.parse(xhr.responseText);
+			console.log(user);
+			buildAccountTable();
+			setupForm();
+			buildPendingTable();
+		}
 	}
 }
 
@@ -90,6 +133,7 @@ function decision(decision){
 	document.querySelectorAll(".selected").forEach((s)=>{
 		var temp = {
 			transactionID:s.querySelector(".transfer-selection").value,
+			toUser:user.userID,
 			pending:decision
 		};
 		output.push(temp);
@@ -112,16 +156,9 @@ function decision(decision){
 				}
 			})
 			if(update){
-				xhr.onreadystatechange = updateUser;
-				xhr.open("POST",server+"/customer/read", true);
-				xhr.setRequestHeader("content-type","application/json");
-				xhr.send(localStorage.getItem("user"));
+				updateUser();
 			}
 		}
-	}
-
-	function updateUser(){
-		refreshUser(xhr);
 	}
 }
 
@@ -157,25 +194,11 @@ function transfer(){
 }
 
 function showAccounts(){
-	var els =document.getElementsByClassName("accounts");
-	for(i=0; i<els.length;i++){
-		els[i].style.display="block";
-	}
-	els = document.getElementsByClassName("transfers");
-	for(i=0; i<els.length;i++){
-		els[i].style.display="none";
-	}
+	view("accounts");
 }
 
 function showTransfers(){
-	var els = document.getElementsByClassName("accounts");
-	for(i=0; i<els.length;i++){
-		els[i].style.display="none";
-	}
-	els = document.getElementsByClassName("transfers");
-	for(i=0; i<els.length;i++){
-		els[i].style.display="block";
-	}
+	view("transfers");
 }
 
 function logout(){
@@ -206,10 +229,9 @@ function toggleHistory(event){
 	}
 }
 
-function setupAccounts(){
+function buildAccountTable(){
 	var accounts = user.accounts;
 	var accountsTable = document.querySelector(".div-table.accounts");
-
 	while(accountsTable.firstChild){
 		accountsTable.removeChild(accountsTable.firstChild);
 	}
@@ -218,58 +240,104 @@ function setupAccounts(){
 	accountRow.classList.remove(".account-row")
 	accountRow.classList.add("account-header");
 	accountsTable.appendChild(accountRow);
+	var rowIndex = 0;
 	for(indexA=0;indexA<accounts.length;indexA++){
 		var accountInfo = accounts[indexA];
-		accountRow = addAccount(accountInfo);
-		if(indexA%2===0){
-			accountRow.classList.add("account-row-one");
-		}else{
-			accountRow.classList.add("account-row-two");
+		if(accountInfo.accepted){
+			accountRow = addAccount(accountInfo);
+			if(rowIndex%2===0){
+				accountRow.classList.add("account-row-one");
+			}else{
+				accountRow.classList.add("account-row-two");
+			}
+			accountsTable.appendChild(accountRow);
+			rowIndex++;
 		}
-		accountsTable.appendChild(accountRow);
-		var historyTable = addHistory(accountInfo.accountID,user.transactions);
-		accountRow.appendChild(historyTable);
 	}
-	function addAccount(info){
-		var newRow = document.querySelector(".sample.account-row").cloneNode(true);
-		newRow.classList.remove("sample");
-		newRow.querySelector(".account").innerText=info.accountID;
-		newRow.querySelector(".type").innerText=info.type;
-		newRow.querySelector(".balance").innerText=info.balance.toLocaleString('us-US', { style: 'currency', currency: 'USD' });
-		newRow.onclick=toggleHistory;
-		return newRow;		
+}
+
+function addAccount(info){
+	var newRow = document.querySelector(".sample.account-row").cloneNode(true);
+	newRow.classList.remove("sample");
+	newRow.querySelector(".account").innerText=info.accountID;
+	newRow.querySelector(".type").innerText=info.type;
+	newRow.querySelector(".balance").innerText=info.balance.toLocaleString('us-US', { style: 'currency', currency: 'USD' });
+	newRow.onclick=toggleHistory;
+	var historyTable = buildHistoryTable(info.accountID);
+	newRow.appendChild(historyTable);
+	return newRow;		
+}
+
+function buildHistoryTable(aid){
+	var newTable = document.querySelector(".sample.history-table").cloneNode(true);
+	newTable.classList.remove("sample");
+	newTable.style.display="none";
+	for(i=0;i<user.transactions.length;i++){
+		var t = user.transactions[i];
+		if(t.pending && (t.fromAccount==aid || t.toAccount==aid)){
+			var newRow = addHistory(t);
+			newTable.appendChild(newRow);
+		}				
 	}
-	function addHistory(aid, transactions){
-		var newTable = document.querySelector(".sample.history-table").cloneNode(true);
-		newTable.classList.remove("sample");
-		newTable.style.display="none";
-		for(i=0;i<transactions.length;i++){
-			var t = transactions[i];
-			if(t.pending && (t.fromAccount==aid || t.toAccount==aid)){
-				var newRow = document.querySelector(".sample.history-row").cloneNode(true);
-				newRow.classList.remove("sample");
-				var d="";
-				if(t.fromAccount=="0"){
-					newRow.classList.add("history-deposit");
-					d=`Deposit into ${t.toAccount}`;	
-				}else if(t.toAccount=="0"){
-					newRow.classList.add("history-withdraw");
-					d=`Withdrawal from ${t.fromAccount}`;
-				} else{
-					newRow.classList.add("history-transfer");
-					d=`Transfer from ${t.fromAccount} to ${t.toAccount}`;
-				}
-				var ndate = new Date();
-				ndate.setTime(t.timestamp*1);
-				newRow.querySelector(".timestamp").innerText=`${ndate.getMonth()}/${ndate.getDay()}/${ndate.getUTCFullYear()}`;
-				newRow.querySelector(".description").innerText=d;
-				newRow.querySelector(".amount").innerText=t.amount.toLocaleString('us-US', { style: 'currency', currency: 'USD' });
-				newRow.querySelector(".previousbalance").innerText="undefined";
-				newTable.appendChild(newRow);
-			}				
+	return newTable;
+}
+
+function addHistory(info){
+	var newRow = document.querySelector(".sample.history-row").cloneNode(true);
+	newRow.classList.remove("sample");
+	var d="";
+	if(info.fromAccount=="0"){
+		newRow.classList.add("history-deposit");
+		d=`Deposit into ${info.toAccount}`;	
+	}else if(info.toAccount=="0"){
+		newRow.classList.add("history-withdraw");
+		d=`Withdrawal from ${info.fromAccount}`;
+	} else{
+		newRow.classList.add("history-transfer");
+		d=`Transfer from ${info.fromAccount} to ${info.toAccount}`;
+	}
+	var ndate = new Date();
+	ndate.setTime(info.timestamp*1);
+	newRow.querySelector(".timestamp").innerText=`${ndate.getMonth()}/${ndate.getDay()}/${ndate.getUTCFullYear()}`;
+	newRow.querySelector(".description").innerText=d;
+	newRow.querySelector(".amount").innerText=info.amount.toLocaleString('us-US', { style: 'currency', currency: 'USD' });
+	newRow.querySelector(".previousbalance").innerText="undefined";
+	return newRow
+}
+
+function buildPendingTable(){
+	var pendingTable = document.querySelector(".div-table.pending");
+	while(pendingTable.firstChild){
+		pendingTable.removeChild(pendingTable.firstChild);
+	}
+	var pendingRow = document.querySelector(".sample.pending-row").cloneNode(true);
+	pendingRow.classList.remove("sample");
+	pendingRow.classList.remove(".pending-row")
+	pendingRow.classList.add("pending-header");
+	pendingTable.appendChild(pendingRow);
+	var rowIndex = 0;
+	for(indexA=0;indexA<user.accounts.length;indexA++){
+		var info = user.accounts[indexA];
+		if(!info.accepted){
+			pendingRow = addPendingAccount(info);
+			if(rowIndex%2===0){
+				pendingRow.classList.add("account-row-one");
+			}else{
+				pendingRow.classList.add("account-row-two");
+			}
+			pendingTable.appendChild(pendingRow);
+			rowIndex++;
 		}
-		return newTable;
-	}
+    }
+}
+
+function addPendingAccount(info){
+	var newRow = document.querySelector(".sample.pending-row").cloneNode(true);
+    newRow.classList.remove("sample");
+    newRow.querySelector(".account").innerText=info.accountID;
+    newRow.querySelector(".type").innerText=info.type;
+    newRow.querySelector(".balance").innerText=info.balance.toLocaleString('us-US', { style: 'currency', currency: 'USD' });
+    return newRow;	
 }
 
 function setupForm(){
@@ -291,7 +359,7 @@ function setupForm(){
 	switchTransaction();
 }
 
-function setupTransfers(){
+function buildTransferTable(){
 	var tTable = document.querySelector(".transfers.div-table");
 	while(tTable.firstChild){
 		tTable.removeChild(tTable.firstChild);
@@ -299,36 +367,43 @@ function setupTransfers(){
 	var nRow = document.querySelector(".sample.transfer-header");
 	nRow.classList.remove("sample");
 	tTable.appendChild(nRow);
-	var ids = getAccountIDs();
+	var ids = getAccountIDs(true);
 	for(i=0;i<user.transactions.length;i++){
 		var t = user.transactions[i];
 		if(!t.accepted&&t.fromAccount!=0&&t.toAccount!=0){
-			nRow = document.querySelector(".sample.transfer-row").cloneNode(true);
-			nRow.classList.remove("sample");
-			var d="";
-			if(t.toAccount in ids){
-				d=`Transfer into ${t.toAccount} from user:${t.fromUser}`;
-				nRow.classList.add("incoming");
-			} else{
-				d=`Transfer from ${t.fromAccount} to account ${t.toAccount}`;
-				nRow.classList.add("outgoing");
-			}
-			var ndate = new Date();
-			ndate.setTime(t.timestamp*1);
-			nRow.querySelector(".inner").innerText=`${ndate.getMonth()}/${ndate.getDay()}/${ndate.getUTCFullYear()}`;
-			nRow.querySelector(".transfer-selection").value=t.transactionID;
-			nRow.querySelector(".transfer-selection").classList.add("sample");
-			nRow.querySelector(".description").innerText=d;
-			nRow.querySelector(".amount").innerText=t.amount.toLocaleString('us-US', { style: 'currency', currency: 'USD' });
+			nRow = addTransfer(t, ids);
 			tTable.appendChild(nRow);
 		}
 	}
 }
 
-function getAccountIDs(){
+function addTransfer(info, ids){
+	nRow = document.querySelector(".sample.transfer-row").cloneNode(true);
+	nRow.classList.remove("sample");
+	var d="";
+	if(info.toAccount in ids){
+		d=`Transfer into ${info.toAccount} from user:${info.fromUser}`;
+		nRow.classList.add("incoming");
+	} else{
+		d=`Transfer from ${info.fromAccount} to account ${info.toAccount}`;
+		nRow.classList.add("outgoing");
+	}
+	var ndate = new Date();
+	ndate.setTime(info.timestamp*1);
+	nRow.querySelector(".inner").innerText=`${ndate.getMonth()}/${ndate.getDay()}/${ndate.getUTCFullYear()}`;
+	nRow.querySelector(".transfer-selection").value=info.transactionID;
+	nRow.querySelector(".transfer-selection").classList.add("sample");
+	nRow.querySelector(".description").innerText=d;
+	nRow.querySelector(".amount").innerText=info.amount.toLocaleString('us-US', { style: 'currency', currency: 'USD' });
+	return nRow;
+}
+
+function getAccountIDs(accepted){
 	var list = [];
 	for(i=0;i<user.accounts.length;i++){
-		list.push(user.accounts[i].accountID);
+		if(accepted==null || user.accounts[i].accepted==accepted){
+			list.push(user.accounts[i].accountID);
+		}	
 	}
 	return list;
 }

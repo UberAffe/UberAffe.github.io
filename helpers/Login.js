@@ -31,12 +31,14 @@ function submit() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             localStorage.setItem("user",xhr.responseText);
             var user = JSON.parse(xhr.responseText);
-            if(typeof user.accounts !== 'undefined') {
-                window.location.href = "../pages/customer.html";
-            }else if(typeof user.userID!== 'undefined'){
-                window.location.href = "../pages/employee.html";
+            if(user.approved){
+                if(typeof user.accounts !== 'undefined') {
+                    window.location.href = "../pages/customer.html";
+                }else {
+                    window.location.href = "../pages/employee.html";
+                }
             }else{
-                alert("The login credentials do not match any known user.\nDid you mean to register a new account?");
+                alert("Either your login credentials were incorrect, our your account has not been approved.");
             }
         }
     }

@@ -21,12 +21,20 @@
     <br><br>
     <div class="div-table transactions base">	
     </div>
+    <div class="form pending-accounts base">
+        <button onclick="accountApproval(true)">Approve</button>
+        <button onclick="accountApproval(false)">Deny</button>
+    </div>
     <div class="div-table pending-accounts base">	
+    </div>
+    <div class="form pending-users base">
+        <button onclick="userApproval(true)">Approve</button>
+        <button onclick="userApproval(false)">Deny</button>
     </div>
     <div class="div-table pending-users base">	
     </div>
     <div class="form user-accounts base">
-        <input type="text" name="userid" onchange="setupAccounts()">
+        <input type="text" name="userid" onchange="getAccounts()">
     </div>
     <div class="div-table user-accounts base">	
     </div>
@@ -38,12 +46,17 @@
 			<div class="div-table-col previousbalance">Previous Balance</div>
         </div>
         <div class="div-table-row sample account-row">
+            <div class="div-table-col account">Account #</div>
+            <div class="div-table-col type">Account Type</div>
+            <div class="div-table-col balance">Starting Balance</div>
+        </div>
+        <div class="div-table-row sample pending-account-row" onclick="pendingAccountChecked(this)">
 			<div class="div-table-col userid">User ID</div>
             <div class="div-table-col account">Account #</div>
             <div class="div-table-col type">Account Type</div>
             <div class="div-table-col balance">Starting Balance</div>
         </div>
-        <div class="div-table-row sample pending-user-row">
+        <div class="div-table-row sample pending-user-row" onclick="pendingUserChecked(this)">
 			<div class="div-table-col userid">User ID</div>
 			<div class="div-table-col username">Username</div>
         </div>

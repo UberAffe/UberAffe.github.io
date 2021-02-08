@@ -12,16 +12,19 @@
 	<link rel="stylesheet" href="../helpers/Customer.css">
 	<h2>Welcome to the Bank</h2>
 	<nav>
-		<a class="viewaccounts" onclick="showAccounts()">View Accounts</a>
-		<a class="viewpendingtransfers" onclick="showTransfers()">View Pending Transfers</a>
+		<a class="viewaccounts" onclick="showAccounts()">View Accounts</a> |
+		<a class="viewpendingtransfers" onclick="showTransfers()">View Pending Transfers</a> |
+		<a class="viewpendingaccount" onclick="showPendingAccounts()">View Pending Accounts</a> |
 		<a class="logout" onclick="logout()">Logout</a>
 	</nav>
 	<br><br>
-	<div class="div-table accounts">
+	<div class="div-table accounts base">
 	</div>
-	<div class="div-table transfers">
+	<div class="div-table transfers base">
 	</div>
-	<div class="form accounts">
+	<div class="div-table pending base">
+	</div>
+	<div class="form accounts base">
 		<select class="deposit withdraw transfer" name="transaction-type" onchange="switchTransaction()">
 			<option value="deposit">Deposit</option>
 			<option value="withdraw">Withdraw</option>
@@ -39,12 +42,28 @@
 		<input class="deposit withdraw transfer" name="amount" type="text">
 		<button class="deposit withdraw transfer" name="doTransaction" onclick="doTransaction()"></button>
 	</div>
-	<div class="form transfers">
+	<div class="form transfers base">
 		<button class="into transfer-button" onclick="decision(true)">Accept</button>
 		<button class="into transfer-button" onclick="decision(false)">Deny</button>
 		<button class="out-of transfer-button" onclick="decision(false)">Cancel</button>
 	</div>
+	<div class="form pending base">
+		Account type
+		<select name="type">
+			<option value="CHECKING">Checking</option>
+			<option value="SAVINGS">Savings</option>
+		</select>
+		<br>
+		Initial balance
+		<input name="balance" type="text">
+		<button onclick="submitAccount()">Apply for Account</button>
+	</div>
 	<section class="templates">
+		<div class="div-table-row sample pending-row">
+			<div class="div-table-col account">Account #</div>
+			<div class="div-table-col type">Type</div>
+			<div class="div-table-col balance">Current Balance</div>
+		</div>
 		<div class="div-table-row sample account-row">
 			<div class="div-table-col account">Account #</div>
 			<div class="div-table-col type">Type</div>

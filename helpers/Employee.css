@@ -18,9 +18,18 @@
 .div-table-col.amount{
     width:20%;
 }
-.transactions .row-one{
+.row-one{
     background-color:rgb(159, 161, 158);
 }
-.transactions .row-two{
+.row-two{
     background-color:rgb(143, 146, 142);
+}
+.selected{
+    background-color:rgb(156, 188, 196);
+}
+.selected.row-one{
+    background-color:rgb(142, 161, 133);
+}
+.selected.row-two{
+    background-color:rgb(122, 145, 115);
 }
