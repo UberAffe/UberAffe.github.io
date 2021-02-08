@@ -102,9 +102,7 @@ function doTransaction(){
 
 	function transactionComplete(){
 		if(xhr.readyState==4&&xhr.status==200){
-			if(JSON.parse(xhr.responseText)){
-				updateUser();
-			}
+			updateUser();
 		}
 	}
 }
