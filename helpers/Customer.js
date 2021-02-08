@@ -187,7 +187,7 @@ function transfer(){
 		toAccount:document.getElementsByName("to-account")[0].value,
 		toUser:0,
 		amount:document.getElementsByName("amount")[0].value,
-		accepted:false
+		pending:false
 	}
 }
 
