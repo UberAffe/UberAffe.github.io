@@ -12,7 +12,7 @@ window.onload = ()=>{
 	showAccounts();
 }
 
-window.setInterval(updateUser, 60000);
+window.setInterval(updateUser, 30000);
 
 function view(classtype){
     document.querySelectorAll(".base").forEach((e)=>{
@@ -26,7 +26,7 @@ function view(classtype){
 
 function showPendingAccounts(){
 	view("pending");
-	buildPendingTable();
+	updateUser();
 }
 
 function submitAccount(){
@@ -46,17 +46,13 @@ function submitAccount(){
 
 	function applyComplete(){
 		if(xhr.readyState==4&&xhr.status==200){
-			if(JSON.parse(xhr.responseText)){
-				updateUser();
-			}
+			updateUser();
 		}
 	}
 }
 
 function selectTransfer(row){
 	var cbox = row.querySelector(".transfer-selection");
-	console.log(cbox);
-	console.log(cbox.checked);
 	var incoming = row.classList.contains("incoming")
 	if(cbox.checked){
 		cbox.checked=false;
@@ -114,14 +110,15 @@ function updateUser(){
 	xhr.setRequestHeader("content-type","application/json");
 	xhr.send(localStorage.getItem("user"));
 
-	function refreshUser(xhr){
+	function refreshUser(){
+		console.log(xhr.readyState);
 		if(xhr.readyState==4&&xhr.status==200){
-			localStorage.setItem("user",xhr.responseText);
 			user = JSON.parse(xhr.responseText);
 			console.log(user);
 			buildAccountTable();
 			setupForm();
 			buildPendingTable();
+			buildTransferTable();
 		}
 	}
 }
@@ -145,17 +142,7 @@ function decision(decision){
 	xhr.send(output);
 	function transactionComplete(){
 		if(xhr.readyState==4&&xhr.status==200){
-			var bools = JSON.parse(xhr.responseText);
-			console.log(bools);
-			var update=false;
-			bools.results.forEach((b)=>{
-				if(b){
-					update=true;
-				}
-			})
-			if(update){
-				updateUser();
-			}
+			updateUser();
 		}
 	}
 }
@@ -184,7 +171,7 @@ function transfer(){
 	return {
 		fromAccount:document.getElementsByName("from-account")[0].value,
 		fromUser:user.userID,
-		toAccount:document.getElementsByName("to-account")[0].value,
+		toAccount:document.getElementsByName("transfer-to")[0].value,
 		toUser:0,
 		amount:document.getElementsByName("amount")[0].value,
 		pending:false
@@ -362,7 +349,8 @@ function buildTransferTable(){
 	while(tTable.firstChild){
 		tTable.removeChild(tTable.firstChild);
 	}
-	var nRow = document.querySelector(".sample.transfer-header");
+	var nRow = document.querySelector(".sample.transfer-header").cloneNode(true);
+	console.log(nRow);
 	nRow.classList.remove("sample");
 	tTable.appendChild(nRow);
 	var ids = getAccountIDs(true);
@@ -379,7 +367,7 @@ function addTransfer(info, ids){
 	nRow = document.querySelector(".sample.transfer-row").cloneNode(true);
 	nRow.classList.remove("sample");
 	var d="";
-	if(info.toAccount in ids){
+	if((ids.includes(info.toAccount))){
 		d=`Transfer into ${info.toAccount} from user:${info.fromUser}`;
 		nRow.classList.add("incoming");
 	} else{
@@ -399,6 +387,7 @@ function addTransfer(info, ids){
 function getAccountIDs(accepted){
 	var list = [];
 	for(i=0;i<user.accounts.length;i++){
+		console.log(accepted+":"+user.accounts[i].accepted)
 		if(accepted==null || user.accounts[i].accepted==accepted){
 			list.push(user.accounts[i].accountID);
 		}	
