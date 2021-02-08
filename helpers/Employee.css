@@ -1,0 +1,26 @@
+.sample{
+    display:none;
+  }
+.div-table-row {
+    width: 100%;
+    clear: both;
+}
+.div-table-col {
+    display: inline-block; 
+    text-align: center;           
+  }
+.div-table-col.timestamp{
+    width:10%;
+}
+.div-table-col.description{
+    width:40%;
+}
+.div-table-col.amount{
+    width:20%;
+}
+.transactions .row-one{
+    background-color:rgb(159, 161, 158);
+}
+.transactions .row-two{
+    background-color:rgb(143, 146, 142);
+}

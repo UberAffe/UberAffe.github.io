@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+
+	<script src="../helpers/Employee.js"></script>
+	<title>Your Bank</title>
+</head>
+
+<body>
+	<link rel="stylesheet" href="../helpers/Employee.css">
+	<h2>Welcome to the Bank</h2>
+	<nav>
+		<a class="view-transactions" onclick="viewAllTransactions()">View Transactions</a> |
+		<a class="view-pending-accounts" onclick="showPendingAccounts()">View Pending Accounts</a> |
+        <a class="view-pending-users" onclick="showPendingUsers()">View Pending Users</a> |
+        <a class="view-user-accounts" onclick="showUserAccounts()">View User Accounts</a> |
+        <a class="logout" onclick="logout()">Logout</a>
+    </nav>
+    <br><br>
+    <div class="div-table transactions base">	
+    </div>
+    <div class="div-table pending-accounts base">	
+    </div>
+    <div class="div-table pending-users base">	
+    </div>
+    <div class="form user-accounts base">
+        <input type="text" name="userid" onchange="setupAccounts()">
+    </div>
+    <div class="div-table user-accounts base">	
+    </div>
+	<section class="templates">
+		<div class="div-table-row sample transaction-row">
+			<div class="div-table-col timestamp">Date</div>
+			<div class="div-table-col description">Description</div>
+			<div class="div-table-col amount">Amount</div>
+			<div class="div-table-col previousbalance">Previous Balance</div>
+        </div>
+        <div class="div-table-row sample account-row">
+			<div class="div-table-col userid">User ID</div>
+            <div class="div-table-col account">Account #</div>
+            <div class="div-table-col type">Account Type</div>
+            <div class="div-table-col balance">Starting Balance</div>
+        </div>
+        <div class="div-table-row sample pending-user-row">
+			<div class="div-table-col userid">User ID</div>
+			<div class="div-table-col username">Username</div>
+        </div>
+        <div class="div-table-row sample user-account-row">
+			<div class="div-table-col account">Account #</div>
+            <div class="div-table-col type">Account Type</div>
+            <div class="div-table-col balance">Balance</div>
+        </div>
+	</section>
+</body>
+</html>

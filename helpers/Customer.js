@@ -2,8 +2,10 @@
  * 
  */
 var user;
+var server;
 window.onload = ()=>{
 	user = JSON.parse(localStorage.getItem("user"));
+	server = localStorage.getItem("server");
 	setupAccounts();
 	setupForm();
 	setupTransfers();
@@ -12,13 +14,30 @@ window.onload = ()=>{
 
 function selectTransfer(row){
 	var cbox = row.querySelector(".transfer-selection");
+	console.log(cbox);
+	console.log(cbox.checked);
+	var incoming = row.classList.contains("incoming")
 	if(cbox.checked){
 		cbox.checked=false;
 		row.classList.remove("selected");
 	}else{
 		cbox.checked=true;
 		row.classList.add("selected");
+		var sels = document.querySelectorAll(".selected");
+		sels.forEach((el)=>{
+			if(el.classList.contains("incoming")!=incoming){
+				el.classList.remove("selected");
+				el.querySelector(".transfer-selection").checked=false;
+			}
+		});
 	}
+	document.querySelectorAll(".transfer-button").forEach((el)=>{
+		if(el.classList.contains("into")!=incoming){
+			el.style.display="none";
+		}else{
+			el.style.display="";
+		}
+	});
 }
 
 function doTransaction(){
@@ -36,7 +55,7 @@ function doTransaction(){
 	console.log(output);
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = transactionComplete;
-    xhr.open("POST","http://66.41.241.124:8080/Banking/rest/transaction/send", true);
+    xhr.open("POST",server+"/transaction/send", true);
     xhr.setRequestHeader("content-type","application/json");
 	xhr.send(output);
 
@@ -44,7 +63,7 @@ function doTransaction(){
 		if(xhr.readyState==4&&xhr.status==200){
 			if(JSON.parse(xhr.responseText)){
 				xhr.onreadystatechange = updateUser;
-				xhr.open("POST","http://66.41.241.124:8080/Banking/rest/customer/read", true);
+				xhr.open("POST",server+"/customer/read", true);
 				xhr.setRequestHeader("content-type","application/json");
 				xhr.send(localStorage.getItem("user"));
 			}
@@ -52,13 +71,57 @@ function doTransaction(){
 	}
 
 	function updateUser(){
+		refreshUser(xhr);
+	}
+}
+
+function refreshUser(xhr){
+	if(xhr.readyState==4&&xhr.status==200){
+		localStorage.setItem("user",xhr.responseText);
+		user = JSON.parse(xhr.responseText);
+		console.log(user);
+		setupAccounts();
+		setupForm();
+	}
+}
+
+function decision(decision){
+	var output = [];
+	document.querySelectorAll(".selected").forEach((s)=>{
+		var temp = {
+			transactionID:s.querySelector(".transfer-selection").value,
+			pending:decision
+		};
+		output.push(temp);
+	});
+	output = JSON.stringify(output);
+	console.log(output);
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = transactionComplete;
+    xhr.open("POST",server+"/transaction/decisions", true);
+    xhr.setRequestHeader("content-type","application/json");
+	xhr.send(output);
+	function transactionComplete(){
 		if(xhr.readyState==4&&xhr.status==200){
-			localStorage.setItem("user",xhr.responseText);
-			user = JSON.parse(xhr.responseText);
-			console.log(user);
-			setupAccounts();
-			setupForm();
+			var bools = JSON.parse(xhr.responseText);
+			console.log(bools);
+			var update=false;
+			bools.results.forEach((b)=>{
+				if(b){
+					update=true;
+				}
+			})
+			if(update){
+				xhr.onreadystatechange = updateUser;
+				xhr.open("POST",server+"/customer/read", true);
+				xhr.setRequestHeader("content-type","application/json");
+				xhr.send(localStorage.getItem("user"));
+			}
 		}
+	}
+
+	function updateUser(){
+		refreshUser(xhr);
 	}
 }
 
@@ -117,6 +180,7 @@ function showTransfers(){
 
 function logout(){
 	localStorage.removeItem("user");
+	localStorage.removeItem("server");
 	window.location.href="../pages/bank.html";
 }
 

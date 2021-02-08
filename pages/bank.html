@@ -13,13 +13,13 @@
     <h2>This is the login page.</h2>
     <br>
     <!--<form>-->
-        <select class="option">
+        <select class="option" onchange="swap()">
             <option class="option" value="login">Login</option>
             <option class="option" value="regiser">Register</option>
         </select><br>
         Username:<input type="text" id="username"><br>
         Password:<input type="password" id="password"><br>
-        <button type="button" id="loginButton" onclick="submit()">Login</button>
+        <button onclick="submit()">Login</button>
     <!--</form>-->
     <script src="../helpers/Login.js"></script>
 </body>

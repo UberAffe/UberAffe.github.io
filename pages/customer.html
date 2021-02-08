@@ -39,6 +39,11 @@
 		<input class="deposit withdraw transfer" name="amount" type="text">
 		<button class="deposit withdraw transfer" name="doTransaction" onclick="doTransaction()"></button>
 	</div>
+	<div class="form transfers">
+		<button class="into transfer-button" onclick="decision(true)">Accept</button>
+		<button class="into transfer-button" onclick="decision(false)">Deny</button>
+		<button class="out-of transfer-button" onclick="decision(false)">Cancel</button>
+	</div>
 	<section class="templates">
 		<div class="div-table-row sample account-row">
 			<div class="div-table-col account">Account #</div>
