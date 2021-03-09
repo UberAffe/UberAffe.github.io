@@ -70,6 +70,24 @@
     border-style: dotted;
     background-color:rgb(130, 134, 128);
   }
+  .slideout{
+    animation-duration: ease(.5s);
+    animation-name: slidingOut;
+    animation-iteration-count: 1;
+    overflow: clip;
+  }
+
+  @keyframes slidingOut{
+    0% {
+      /* transform: scale(100%,0%) */
+      height: 0;
+    }
+    100% {
+      /* transform: scale(100%,100%); */
+      height: auto;
+    }
+  }
+
   .account-row-one{
     background-color:rgb(159, 161, 158);
   }
