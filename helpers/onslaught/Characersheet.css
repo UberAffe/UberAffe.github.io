@@ -1,0 +1,7 @@
+.left{
+    width: 50%;
+    flex-grow: 1;
+}
+.right{
+    flex-grow: 1;
+}
