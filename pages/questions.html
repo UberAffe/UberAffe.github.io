@@ -1,0 +1,29 @@
+<html>
+    <body>
+        <script src="../helpers/questions.js"></script>
+        <div class="login">
+            <input id="username" type="text">
+            <select id="login-Type">
+                <option value="giver">Test Giver</option>
+                <option value="taker">Test Taker</option>
+            </select>
+            <button onclick="login()">Connect</button>
+        </div>        
+        <div class="giver">
+            <input class="question-image" type="file">
+            <button onclick="sendQuestion()">Send</button>
+            <div class="question-responses">
+                <h2 class="user"></h2>
+                <br>
+                <p class="response"></p>
+                <br>
+            </div>
+        </div>
+        <div class="taker">
+            <img class="question-image" src="" alt-text="Question not posted yet"/>
+            <br>
+            <input id="answer-text" type="text" height="400px" width="600px"/>
+            <button onclick="sendAnswer()">Send</button>       
+        </div>
+    </body>
+</html>
